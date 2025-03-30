@@ -1,49 +1,57 @@
 /*
-See the LICENSE.txt file for this sample’s licensing information.
+ See the LICENSE.txt file for this sample’s licensing information.
 
-Abstract:
-The ImageURLProtocol of the sample.
-*/
+ Abstract:
+ The ImageURLProtocol of the sample.
+ */
 import UIKit
 
 class ImageURLProtocol: URLProtocol {
 
     var cancelledOrComplete: Bool = false
     var block: DispatchWorkItem!
-    
+
     private static let queue = DispatchSerialQueue(label: "com.apple.imageLoaderURLProtocol")
-    
+
     override class func canInit(with request: URLRequest) -> Bool {
         return true
     }
-    
+
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
-    
+
     class override func requestIsCacheEquivalent(_ aRequest: URLRequest, to bRequest: URLRequest) -> Bool {
         return false
     }
-    
+
     final override func startLoading() {
         guard let reqURL = request.url, let urlClient = client else {
             return
         }
-        
+
+
         block = DispatchWorkItem(block: {
             if self.cancelledOrComplete == false {
                 let fileURL = URL(fileURLWithPath: reqURL.path)
-                if let data = try? Data(contentsOf: fileURL) {
+                if let data = try? Data(contentsOf: fileURL),
+                   let httpResponse = HTTPURLResponse(url: reqURL,
+                                                      statusCode: 200,
+                                                      httpVersion: nil,
+                                                      headerFields: nil) {
+                    urlClient.urlProtocol(self,
+                                          didReceive: httpResponse,
+                                          cacheStoragePolicy: .allowed)
                     urlClient.urlProtocol(self, didLoad: data)
                     urlClient.urlProtocolDidFinishLoading(self)
                 }
             }
             self.cancelledOrComplete = true
         })
-        
+
         ImageURLProtocol.queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC), execute: block)
     }
-    
+
     final override func stopLoading() {
         ImageURLProtocol.queue.async {
             if self.cancelledOrComplete == false, let cancelBlock = self.block {
@@ -52,11 +60,11 @@ class ImageURLProtocol: URLProtocol {
             }
         }
     }
-    
+
     static func urlSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [ImageURLProtocol.classForCoder()]
         return  URLSession(configuration: config)
     }
-    
+
 }
