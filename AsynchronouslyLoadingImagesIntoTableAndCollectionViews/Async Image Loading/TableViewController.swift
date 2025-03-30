@@ -23,8 +23,8 @@ class TableViewController: UITableViewController {
             /// - Tag: update
             var content = cell.defaultContentConfiguration()
             content.image = item.image
-            ImageCache.publicCache.load(url: item.url as NSURL, item: item) { (fetchedItem, image) in
-                if let img = image, img != fetchedItem.image {
+            ImageCache.publicCache.load(url: item.url as NSURL, item: item) { [weak self] (fetchedItem, image) in
+                if let self, let img = image, img != fetchedItem.image {
                     var updatedSnapshot = self.dataSource.snapshot()
                     if let datasourceIndex = updatedSnapshot.indexOfItem(fetchedItem) {
                         let item = self.imageObjects[datasourceIndex]

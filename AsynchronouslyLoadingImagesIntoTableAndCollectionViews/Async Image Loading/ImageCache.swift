@@ -34,9 +34,9 @@ public class ImageCache {
             loadingResponses[url] = [completion]
         }
         // Go fetch the image.
-        ImageURLProtocol.urlSession().dataTask(with: url as URL) { (data, response, error) in
+        ImageURLProtocol.urlSession().dataTask(with: url as URL) { [weak self] (data, response, error) in
             // Check for the error, then data and try to create the image.
-            guard let responseData = data, let image = UIImage(data: responseData),
+            guard let self, let responseData = data, let image = UIImage(data: responseData),
                 let blocks = self.loadingResponses[url], error == nil else {
                 DispatchQueue.main.async {
                     completion(item, nil)
