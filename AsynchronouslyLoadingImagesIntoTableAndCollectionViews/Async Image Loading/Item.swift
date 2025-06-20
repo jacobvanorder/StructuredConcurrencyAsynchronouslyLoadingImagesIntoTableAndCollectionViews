@@ -10,22 +10,25 @@ enum Section {
     case main
 }
 
-class Item: Hashable {
-    
+@MainActor
+class Item: Identifiable {
+
     var image: UIImage!
+    var isImageLoaded: Bool = false
     let url: URL!
-    let identifier = UUID()
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-    static func == (lhs: Item, rhs: Item) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-    
+    let id = UUID()
+
     init(image: UIImage, url: URL) {
         self.image = image
         self.url = url
     }
+}
 
+extension Item: Hashable, Equatable {
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    nonisolated static func == (lhs: Item, rhs: Item) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
