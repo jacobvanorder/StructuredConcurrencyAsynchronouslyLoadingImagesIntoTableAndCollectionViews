@@ -4,14 +4,15 @@
  Abstract:
  The ImageURLProtocol of the sample.
  */
-import UIKit
 
-class ImageURLProtocol: URLProtocol {
+import Foundation
+import os
 
-    var cancelledOrComplete: Bool = false
-    var block: DispatchWorkItem!
+final class ImageURLProtocol: URLProtocol {
 
-    private static let queue = DispatchSerialQueue(label: "com.apple.imageLoaderURLProtocol")
+    private var asyncTask: Task<(), Never>?
+    private let logger = Logger(subsystem: "com.example.async-image-loading.ImageURLProtocol",
+                        category: "Loader")
 
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -30,12 +31,15 @@ class ImageURLProtocol: URLProtocol {
             return
         }
 
-
-        block = DispatchWorkItem(block: {
-            if self.cancelledOrComplete == false {
+        self.asyncTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                try Task.checkCancellation()
+                try await Task.sleep(for: .randomSeconds(min: 0.5, max: 3.0))
+                try Task.checkCancellation()
                 let fileURL = URL(fileURLWithPath: reqURL.path)
-                if let data = try? Data(contentsOf: fileURL),
-                   let httpResponse = HTTPURLResponse(url: reqURL,
+                let data = try Data(contentsOf: fileURL)
+                if let httpResponse = HTTPURLResponse(url: reqURL,
                                                       statusCode: 200,
                                                       httpVersion: nil,
                                                       headerFields: nil) {
@@ -45,19 +49,16 @@ class ImageURLProtocol: URLProtocol {
                     urlClient.urlProtocol(self, didLoad: data)
                     urlClient.urlProtocolDidFinishLoading(self)
                 }
+            } catch {
+                self.logger.debug("Error with load: \(error.localizedDescription)")
+                urlClient.urlProtocol(self, didFailWithError: error)
             }
-            self.cancelledOrComplete = true
-        })
-
-        ImageURLProtocol.queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC), execute: block)
+        }
     }
 
     final override func stopLoading() {
-        ImageURLProtocol.queue.async {
-            if self.cancelledOrComplete == false, let cancelBlock = self.block {
-                cancelBlock.cancel()
-                self.cancelledOrComplete = true
-            }
+        if let asyncTask {
+            asyncTask.cancel()
         }
     }
 
@@ -67,4 +68,10 @@ class ImageURLProtocol: URLProtocol {
         return  URLSession(configuration: config)
     }
 
+}
+
+extension Duration {
+    static func randomSeconds(min: Double, max: Double) -> Duration {
+        return .seconds(Double.random(in: (min...max)))
+    }
 }
