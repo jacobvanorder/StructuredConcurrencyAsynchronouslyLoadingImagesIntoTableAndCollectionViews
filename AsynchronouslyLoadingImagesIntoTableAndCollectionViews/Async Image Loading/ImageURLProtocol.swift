@@ -6,6 +6,7 @@
  */
 import UIKit
 
+// TODO: Convert to Swift 6 Safe Type
 class ImageURLProtocol: URLProtocol {
 
     var cancelledOrComplete: Bool = false
@@ -49,16 +50,19 @@ class ImageURLProtocol: URLProtocol {
             self.cancelledOrComplete = true
         })
 
-        ImageURLProtocol.queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC), execute: block)
+        ImageURLProtocol.queue.asyncAfter(deadline: .now() + 3.0, execute: block)
     }
 
     final override func stopLoading() {
+        // TODO: Convert to Swift 6 Safe Type
+        /*
         ImageURLProtocol.queue.async {
             if self.cancelledOrComplete == false, let cancelBlock = self.block {
                 cancelBlock.cancel()
                 self.cancelledOrComplete = true
             }
         }
+         */
     }
 
     static func urlSession() -> URLSession {

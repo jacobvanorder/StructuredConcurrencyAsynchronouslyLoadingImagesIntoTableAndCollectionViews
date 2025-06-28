@@ -10,22 +10,32 @@ enum Section {
     case main
 }
 
-class Item: Hashable {
-    
-    var image: UIImage!
-    let url: URL!
-    let identifier = UUID()
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-    static func == (lhs: Item, rhs: Item) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-    
-    init(image: UIImage, url: URL) {
-        self.image = image
+@MainActor
+final class Item: Identifiable {
+    let url: URL
+    let id = UUID()
+    var image: UIImage?
+
+    init(url: URL) {
         self.url = url
     }
+}
 
+extension Item: Hashable, Equatable {
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    nonisolated static func == (lhs: Item, rhs: Item) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension Item {
+    static var mockItems: [Item] {
+        return Array(1...100).compactMap { index in
+            if let url = Bundle.main.url(forResource: "UIImage_\(index)", withExtension: "png") {
+                return Item(url: url)
+            } else { return nil }
+        }
+    }
 }

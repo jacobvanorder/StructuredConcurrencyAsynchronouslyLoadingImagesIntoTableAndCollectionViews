@@ -39,19 +39,28 @@ class CollectionViewController: UICollectionViewController {
             var content = UIListContentConfiguration.cell()
             content.directionalLayoutMargins = .zero
             content.axesPreservingSuperviewLayoutMargins = []
-            content.image = item.image
-            
-            ImageCache.publicCache.load(url: item.url as NSURL, item: item) { [weak self] (fetchedItem, image) in
-                if let self, let img = image, img != fetchedItem.image {
-                    var updatedSnapshot = self.dataSource.snapshot()
-                    if let datasourceIndex = updatedSnapshot.indexOfItem(fetchedItem) {
-                        let item = self.imageObjects[datasourceIndex]
-                        item.image = img
-                        updatedSnapshot.reloadItems([item])
-                        self.dataSource.apply(updatedSnapshot, animatingDifferences: true)
+
+            if let itemImage = item.image { // Did we set the image previously?
+                content.image = itemImage
+            } else if let cachedImage = ImageCacheActor.publicCache.image(url: item.url) { // Did the actor already load this image elsewhere?
+                content.image = cachedImage
+            } else { // Set the placeholder and go fetch the image!
+                content.image = ImageCacheActor.placeholderImage
+                Task { [weak self] in
+                    let newImage: UIImage
+                    do {
+                        newImage = try await ImageCacheActor.publicCache.load(url: item.url)
+                    } catch {
+                        newImage = ImageCacheActor.brokenImage
                     }
+                    guard let self else { return }
+                    item.image = newImage
+                    var updatedSnapshot = self.dataSource.snapshot()
+                    updatedSnapshot.reloadItems([item])
+                    await self.dataSource.apply(updatedSnapshot, animatingDifferences: true)
                 }
             }
+
             cell.contentConfiguration = content
         }
         
@@ -62,11 +71,7 @@ class CollectionViewController: UICollectionViewController {
         
         // Get our image URLs for processing.
         if imageObjects.isEmpty {
-            for index in 1...100 {
-                if let url = Bundle.main.url(forResource: "UIImage_\(index)", withExtension: "png") {
-                    self.imageObjects.append(Item(image: ImageCache.publicCache.placeholderImage, url: url))
-                }
-            }
+            self.imageObjects = Item.mockItems
             var initialSnapshot = NSDiffableDataSourceSnapshot<Section, Item>()
             initialSnapshot.appendSections([.main])
             initialSnapshot.appendItems(self.imageObjects)
