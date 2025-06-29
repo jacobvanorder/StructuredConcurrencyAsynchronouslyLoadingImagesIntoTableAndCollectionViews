@@ -46,7 +46,7 @@ public actor ImageCacheActor {
 
         // Go fetch the image.
         let currentTask = Task {
-            let (data, _) = try await ImageURLProtocol.urlSession().data(from: url)
+            let (data, _) = try await ImageURLAsyncProtocol.urlSession().data(from: url)
             // Try to create the image. If not, throw bad image data error.
             guard let image = UIImage(data: data) else {
                 throw LoadingError.badImageData
