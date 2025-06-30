@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		575E518E208810BB000B72BC /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575E518B208810BB000B72BC /* ImageCache.swift */; };
+		16A718882E14138E00998DEB /* ImageURLRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A718872E14138E00998DEB /* ImageURLRepository.swift */; };
+		16A7188A2E1413A600998DEB /* ImageURLNetworkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A718892E1413A600998DEB /* ImageURLNetworkRepository.swift */; };
+		16A7188C2E1413BD00998DEB /* ImageURLMockRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A7188B2E1413BD00998DEB /* ImageURLMockRepository.swift */; };
+		575E518E208810BB000B72BC /* ImageCacheActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575E518B208810BB000B72BC /* ImageCacheActor.swift */; };
 		575E5190208810BB000B72BC /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575E518D208810BB000B72BC /* Item.swift */; };
 		578A134C235F9D1700E0ED5A /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578A134B235F9D1700E0ED5A /* CollectionViewController.swift */; };
 		57B31F6B2076C3E100510E94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B31F6A2076C3E100510E94 /* AppDelegate.swift */; };
@@ -115,7 +118,6 @@
 		693659EB23FDBD9C008ED732 /* UIImage_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 693658C523FDBD9C008ED732 /* UIImage_60.png */; };
 		693659EE23FDBD9D008ED732 /* UIImage_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 693658C623FDBD9C008ED732 /* UIImage_18.png */; };
 		693659F123FDBD9D008ED732 /* UIImage_70.png in Resources */ = {isa = PBXBuildFile; fileRef = 693658C723FDBD9C008ED732 /* UIImage_70.png */; };
-		693659F523FDBDB0008ED732 /* ImageURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693659F423FDBDB0008ED732 /* ImageURLProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -142,8 +144,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		16A718872E14138E00998DEB /* ImageURLRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLRepository.swift; sourceTree = "<group>"; };
+		16A718892E1413A600998DEB /* ImageURLNetworkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLNetworkRepository.swift; sourceTree = "<group>"; };
+		16A7188B2E1413BD00998DEB /* ImageURLMockRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLMockRepository.swift; sourceTree = "<group>"; };
 		40C5639A5B256AF23BA9F028 /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
-		575E518B208810BB000B72BC /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		575E518B208810BB000B72BC /* ImageCacheActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheActor.swift; sourceTree = "<group>"; };
 		575E518D208810BB000B72BC /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		578A134B235F9D1700E0ED5A /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		578A134D235FA46000E0ED5A /* Async Image Loading.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Async Image Loading.entitlements"; sourceTree = "<group>"; };
@@ -255,7 +260,6 @@
 		693658C523FDBD9C008ED732 /* UIImage_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImage_60.png; sourceTree = "<group>"; };
 		693658C623FDBD9C008ED732 /* UIImage_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImage_18.png; sourceTree = "<group>"; };
 		693658C723FDBD9C008ED732 /* UIImage_70.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImage_70.png; sourceTree = "<group>"; };
-		693659F423FDBDB0008ED732 /* ImageURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLProtocol.swift; sourceTree = "<group>"; };
 		F7CE4C80F7CE4B1000000001 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FAC70751E2387211C96D3ABF /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -322,7 +326,7 @@
 				6936586323FDBD75008ED732 /* Images */,
 				578A134D235FA46000E0ED5A /* Async Image Loading.entitlements */,
 				57B31F6A2076C3E100510E94 /* AppDelegate.swift */,
-				575E518B208810BB000B72BC /* ImageCache.swift */,
+				575E518B208810BB000B72BC /* ImageCacheActor.swift */,
 				575E518D208810BB000B72BC /* Item.swift */,
 				578A134B235F9D1700E0ED5A /* CollectionViewController.swift */,
 				57B31F6C2076C3E100510E94 /* TableViewController.swift */,
@@ -330,7 +334,9 @@
 				57B31F712076C3E200510E94 /* Assets.xcassets */,
 				57B31F732076C3E200510E94 /* LaunchScreen.storyboard */,
 				57B31F762076C3E200510E94 /* Info.plist */,
-				693659F423FDBDB0008ED732 /* ImageURLProtocol.swift */,
+				16A718872E14138E00998DEB /* ImageURLRepository.swift */,
+				16A7188B2E1413BD00998DEB /* ImageURLMockRepository.swift */,
+				16A718892E1413A600998DEB /* ImageURLNetworkRepository.swift */,
 			);
 			path = "Async Image Loading";
 			sourceTree = "<group>";
@@ -617,11 +623,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				578A134C235F9D1700E0ED5A /* CollectionViewController.swift in Sources */,
-				575E518E208810BB000B72BC /* ImageCache.swift in Sources */,
+				16A7188C2E1413BD00998DEB /* ImageURLMockRepository.swift in Sources */,
+				575E518E208810BB000B72BC /* ImageCacheActor.swift in Sources */,
+				16A7188A2E1413A600998DEB /* ImageURLNetworkRepository.swift in Sources */,
 				575E5190208810BB000B72BC /* Item.swift in Sources */,
 				57B31F6D2076C3E100510E94 /* TableViewController.swift in Sources */,
 				57B31F6B2076C3E100510E94 /* AppDelegate.swift in Sources */,
-				693659F523FDBDB0008ED732 /* ImageURLProtocol.swift in Sources */,
+				16A718882E14138E00998DEB /* ImageURLRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,12 +12,12 @@ enum Section {
 
 @MainActor
 final class Item: Identifiable {
-    let url: URL
+    let imageName: String
     let id = UUID()
     var image: UIImage?
 
-    init(url: URL) {
-        self.url = url
+    init(imageName: String) {
+        self.imageName = imageName
     }
 }
 
@@ -33,9 +33,7 @@ extension Item: Hashable, Equatable {
 extension Item {
     static var mockItems: [Item] {
         return Array(1...100).compactMap { index in
-            if let url = Bundle.main.url(forResource: "UIImage_\(index)", withExtension: "png") {
-                return Item(url: url)
-            } else { return nil }
+            return Item(imageName: "UIImage_\(index).png")
         }
     }
 }
