@@ -42,14 +42,14 @@ class CollectionViewController: UICollectionViewController {
 
             if let itemImage = item.image { // Did we set the image previously?
                 content.image = itemImage
-            } else if let cachedImage = ImageCacheActor.publicCache.image(url: item.url) { // Did the actor already load this image elsewhere?
+            } else if let cachedImage = ImageCacheActor.publicCache.cachedImage(atURL: item.imageURL) { // Did the actor already load this image elsewhere?
                 content.image = cachedImage
             } else { // Set the placeholder and go fetch the image!
                 content.image = ImageCacheActor.placeholderImage
                 Task { [weak self] in
                     let newImage: UIImage
                     do {
-                        newImage = try await ImageCacheActor.publicCache.load(url: item.url)
+                        newImage = try await ImageCacheActor.publicCache.load(imageAtURL: item.imageURL)
                     } catch {
                         newImage = ImageCacheActor.brokenImage
                     }
